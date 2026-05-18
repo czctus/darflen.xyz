@@ -1,5 +1,6 @@
-import { DarflenClient } from "darflen.ts";
-import { Colour } from "./constants.js";
+import { DarflenClient, Profile } from "darflen.ts";
+
+import { EmbedCutoff } from "./constants.js";
 
 export const darflen = new DarflenClient();
 
@@ -38,6 +39,19 @@ export function formatDate(date: Date): string {
 	});
 
 	return `${map.year}-${map.month}-${map.day} ${map.hour}:${map.minute}`;
+}
+
+export function getUserProps(profile: Profile) {
+	const title = createName(profile.displayName, profile.username);
+	const image = profile.media.avatar.data.large || profile.media.avatar.data.medium || profile.media.avatar.data.thumbnail;
+	return { title, image };
+}
+
+export function getDescription(tags: string, content: string) {
+	const cutoff = EmbedCutoff - tags.length;
+	const demarkedContent = clean(content);
+	const formattedContent = (demarkedContent.length > cutoff ? demarkedContent.slice(0, cutoff) + "..." : demarkedContent);
+	return `${formattedContent}\n\n${tags}`;
 }
 
 export function createName(display: string, username: string) {

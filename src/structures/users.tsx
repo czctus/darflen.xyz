@@ -1,22 +1,18 @@
 import { Profile } from "darflen.ts";
 
-import { clean, createName } from "../utils";
+import { getDescription, getUserProps } from "../utils";
+import {  Icons } from "../constants";
+import { html } from "../html";
 
 import type { Create } from "../types";
-import { EmbedCutoff, Icons } from "../constants";
-import { html } from "../html";
 
 export const create: Create = (hono, darflen) => {
     async function createEmbed(profile: Profile) {
-        const title = createName(profile.displayName, profile.username);
+        const user = getUserProps(profile);
         const tag = `${profile.stats.followers} ${Icons.Followers} | ${profile.stats.posts} ${Icons.Posts} | ${profile.stats.loves} ${Icons.Loves}`;
-        const contentCutoff = EmbedCutoff - tag.length;
-
-        const demarkedDescription = clean(profile.description);
-        const formattedDescription = (demarkedDescription.length > contentCutoff ? demarkedDescription.slice(0, contentCutoff) + "..." : demarkedDescription);
-        const description = `${formattedDescription}\n\n${tag}`;
-
-        const userIcon = profile.media.avatar.data.large || profile.media.avatar.data.medium || profile.media.avatar.data.thumbnail;
+        const description = getDescription(tag, profile.description);
+        const title = user.title;
+        const userIcon = user.image;
 
         const mediaFragment = [
             <meta property='og:image' content={userIcon} />,

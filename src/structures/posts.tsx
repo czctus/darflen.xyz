@@ -1,8 +1,8 @@
 import mime from 'mime-types';
 
-import { EmbedCutoff, Icons } from "../constants";
+import { Icons } from "../constants";
 import { html } from "../html";
-import { clean, createName, formatDate } from "../utils";
+import { formatDate, getDescription, getUserProps } from "../utils";
 
 import type { Create } from "../types";
 
@@ -17,14 +17,12 @@ export const create: Create = (hono, darflen) => {
         const humanDate = formatDate(date);
 
         const tag = `${post.stats.loves} ❤️ | ${post.stats.comments} 💬`;
-        const contentCutoff = EmbedCutoff - tag.length;
-        const demarkedContent = clean(
-            `${post.content}${post.poll ?
-                `\n${post.poll.choices.map(choice => `\n[ ${choice.text} ] (${choice.votes})`).join("")}` : ""}`);
-        const formattedContent = (demarkedContent.length > contentCutoff ? demarkedContent.slice(0, contentCutoff) + "..." : demarkedContent);
 
-        const title = `${createName(post.author.displayName, post.author.username)}${post.pinned ? ` ${Icons.Pinned}` : ""}${post.locked ? ` ${Icons.Locked}` : ""}`
-        const description = `${formattedContent}\n\n${tag}`;
+        const user = getUserProps(post.author);
+        const title = `${user.title}${post.pinned ? ` ${Icons.Pinned}` : ""}${post.locked ? ` ${Icons.Locked}` : ""}`
+        const userIcon = user.image;
+        const description = getDescription(tag, `${post.content}${post.poll ?
+            `\n${post.poll.choices.map(choice => `\n[ ${choice.text} ] (${choice.votes})`).join("")}` : ""}`);
 
         const firstFile = post.media[0];
         const link = (firstFile && firstFile.isImage()) ? (
@@ -35,7 +33,6 @@ export const create: Create = (hono, darflen) => {
             firstFile.data.file ||
             firstFile.data.thumbnail
         ) : null;
-        const userIcon = post.author.media.avatar.data.large || post.author.media.avatar.data.medium || post.author.media.avatar.data.thumbnail;
         const mimeType = link ? mime.lookup(link.split(".").pop() || "") : null;
 
         const iconFragment = [
