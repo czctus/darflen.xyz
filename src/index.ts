@@ -19,6 +19,8 @@ app.use('*', async (c, next) => {
         } else return c.redirect(darflenUrl);
     }
 
+    c.header("vary", "User-Agent");
+
     await next();
 });
 
