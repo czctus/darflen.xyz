@@ -4,6 +4,7 @@ export enum Icons {
 	Followers = "👤",
 	Posts = "📝",
 	Loves = "❤️",
+	Comments = "💬",
 
 	Pinned = "📌",
 	Locked = "🔒",
