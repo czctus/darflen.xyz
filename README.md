@@ -11,8 +11,9 @@ embed proxy for [Darflen](https://darflen.com), built on [darflen.ts](https://gi
 - posts:
     - `/posts/:id`
 - users:
-    - `/users/:username`
-    - `/users/$:id` <!-- the `$` symbol is intentional; it's how the darflen api differentiates between username and id -->
+    - `/users/:username` (or `/users/$:username`) <!-- the `$` symbol is intentional; it's how the darflen api differentiates between username and id -->
+    - `/users/:username/pfp` (or `/users/$:username/pfp`)
+    - `/users/:username/banner` (or `/users/$:username/banner`)
 
 ## usage (as a user)
 1. copy a `darflen.com` url

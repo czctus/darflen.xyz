@@ -12,7 +12,7 @@ export const create: Create = (hono, darflen) => {
         const tag = `${profile.stats.followers} ${Icons.Followers} | ${profile.stats.posts} ${Icons.Posts} | ${profile.stats.loves} ${Icons.Loves}`;
         const description = getDescription(tag, profile.description);
         const title = user.title;
-        const userIcon = user.image;
+        const userIcon = user.image.url;
 
         const mediaFragment = [
             <meta property='og:image' content={userIcon} />,
@@ -39,21 +39,43 @@ export const create: Create = (hono, darflen) => {
         ]);
     }
 
-    hono.get('/users/:username', async (c) => {
-        const username = c.req.param('username');
-        const profile = await darflen.users.get(username, true).catch(() => null);
+    async function getProfile(id: string) {
+        const isId = id.startsWith('$');
+        return await darflen.users.get(isId ? id.slice(1) : id, !isId).catch(() => null);
+    }
 
-        if (!profile) return c.text('no such user with that username', 404);
-
+    hono.get('/users/:id', async (c) => {
+        const id = c.req.param('id');
+        const profile = await getProfile(id);
+    
+        if (!profile) return c.text(`no such user with that ${id.startsWith('$') ? 'id' : 'username'}`, 404);
+    
         return c.html(createEmbed(profile));
     });
+    
+    hono.get("/users/:id/pfp", async (c) => {
+        const profile = await getProfile(c.req.param('id'));
+        if (!profile) return c.text('no such user', 404);
+    
+        const user = getUserProps(profile);
+        const userIcon = await user.image.data.fetch();
 
-    hono.get('/users/$:id', async (c) => {
-        const id = c.req.param('id') as string; // oddly, typescript somehow thinks `$` means its optional..?
-        const profile = await darflen.users.get(id).catch(() => null);
-
-        if (!profile) return c.text('no such user with that id', 404);
-
-        return c.html(createEmbed(profile));
+        return c.body(userIcon, 200, {
+            "Content-Type": userIcon.type,
+            "Cache-Control": "public, max-age=31536000, immutable"
+        });
+    });
+    
+    hono.get("/users/:id/banner", async (c) => {
+        const profile = await getProfile(c.req.param('id'));
+        if (!profile) return c.text('no such user', 404);
+    
+        const user = getUserProps(profile);
+        const banner = await user.banner.data.fetch();
+    
+        return c.body(banner.stream(), 200, {
+            "Content-Type": banner.type,
+            "Cache-Control": "public, max-age=31536000, immutable"
+        });
     });
 }

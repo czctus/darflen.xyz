@@ -44,7 +44,15 @@ export function formatDate(date: Date): string {
 export function getUserProps(profile: Profile) {
 	const title = createName(profile.displayName, profile.username);
 	const image = profile.media.avatar.data.large || profile.media.avatar.data.medium || profile.media.avatar.data.thumbnail;
-	return { title, image };
+	const banner = profile.media.banner.data.large || profile.media.banner.data.medium || profile.media.banner.data.thumbnail;
+
+	return { title, image: {
+		url: image,
+		data: profile.media.avatar
+	}, banner: {
+		url: banner,
+		data: profile.media.banner
+	}  };
 }
 
 export function getDescription(tags: string, content: string) {
