@@ -63,8 +63,8 @@ export const create: Create = (hono, darflen) => {
 
         const iconFragment = [
             <meta property='og:type' content="article" />,
-            <meta property='og:image' content={post.media.icon} />,
-            <meta property='og:image:secure_url' content={post.media.icon} />,
+            <meta property='og:image' content={post.media.icon.url} />,
+            <meta property='og:image:secure_url' content={post.media.icon.url} />,
         ]
         const mediaFragment = firstFile ? (
             firstFile.object.isImage() ?
