@@ -15,6 +15,7 @@ export const html = (...children: any[]) => {
 
                 <meta name="author" content="darflen(xyz)" />
                 <meta property="og:locale" content="en_US" />
+                <meta property="og:type" content="website" />
                 <meta name="twitter:site" content="@darflen" />
                 <meta name="theme-color" content={Colour} />
 
