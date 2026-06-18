@@ -1,4 +1,3 @@
-import { ReactElement } from "hono/jsx";
 import { Colour } from "./constants";
 
 export const html = (...children: any[]) => {
