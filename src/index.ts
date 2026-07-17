@@ -10,7 +10,9 @@ const darflen = new DarflenClient();
 app.use('*', async (c, next) => {
     const ua = new UAParser(c.req.header("User-Agent") || "");
 
-    if (ua.getBrowser().name) {
+    const sendRaw = c.req.query("raw") !== undefined;
+
+    if (ua.getBrowser().name && !sendRaw) {
         const path = c.req.path;
         const darflenUrl = `https://darflen.com${path}`;
         

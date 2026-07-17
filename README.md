@@ -38,6 +38,7 @@ pnpm dev # start the development server
 ### remarks
 - you do not need darflen api keys to run this project, as it only uses public endpoints of the darflen API
 - the project is built using Hono, a web framework for Cloudflare Workers, and darflen.ts, a TypeScript wrapper for the darflen API
+- you can add the `?raw` query parameter to any endpoint to avoid being redirected
 
 ## license
 [MIT](LICENSE)
