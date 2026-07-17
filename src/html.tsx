@@ -18,7 +18,7 @@ export const html = (...children: any[]) => {
                 <meta property="og:type" content="website" />
                 <meta name="twitter:site" content="@darflen" />
                 <meta name="theme-color" content={Colour} />
-
+                <meta name="robots" content="noindex, nofollow" />
                 {children}
             </head>
             <body></body>
