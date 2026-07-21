@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/mime-types": "^3.0.1",
     "darflen.ts": "^0.2.0",
-    "hono": "^4.12.25",
+    "hono": "^4.12.27",
     "mime-types": "^3.0.2",
     "ua-parser-js": "^2.0.10"
   },
