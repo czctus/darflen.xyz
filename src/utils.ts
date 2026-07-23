@@ -1,6 +1,6 @@
 import { DarflenClient, Profile } from "darflen.ts";
 
-import { EmbedCutoff } from "./constants.js";
+import { EmbedCutoff, EmbedLineCutoff } from "./constants.js";
 
 export const darflen = new DarflenClient();
 
@@ -67,7 +67,10 @@ export function getUserProps(profile: Profile) {
 export function getDescription(tags: string, content: string) {
 	const cutoff = EmbedCutoff - tags.length;
 	const demarkedContent = clean(content);
-	const formattedContent = (demarkedContent.length > cutoff ? demarkedContent.slice(0, cutoff) + "..." : demarkedContent);
+	const formattedContent = (demarkedContent.length > cutoff ? demarkedContent.slice(0, cutoff) + "..." : demarkedContent)
+		.split("\n")
+		.slice(0, EmbedLineCutoff)
+		.join("\n"); // todo maybe make this more efficient
 	return `${formattedContent}\n\n${tags}`;
 }
 

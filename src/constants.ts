@@ -1,4 +1,5 @@
 export const EmbedCutoff = 327;
+export const EmbedLineCutoff = 18;
 export const Colour = "#d14d65";
 export enum Icons {
 	Followers = "👤",
